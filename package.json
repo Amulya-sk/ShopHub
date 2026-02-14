@@ -1,0 +1,11 @@
+{
+  "name": "ShopHub",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo Test Passed",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
