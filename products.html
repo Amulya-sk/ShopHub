@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse our complete collection of premium products">
+    <title>Products - ShopHub</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .products-page {
+            padding: var(--spacing-3xl) 0;
+        }
+
+        .products-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--spacing-2xl);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .filters-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .filter-group {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .filter-group h3 {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-gray-900);
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+        }
+
+        .filter-option input {
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-700);
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .products-count {
+            font-size: var(--font-size-lg);
+            color: var(--color-gray-700);
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 2px solid var(--color-gray-300);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .products-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">ShopHub</a>
+
+            <button class="mobile-menu-toggle">☰</button>
+
+            <ul class="navbar-menu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="products.html" class="navbar-link">Products</a></li>
+                <li><a href="cart.html" class="navbar-link">
+                        <div class="cart-icon">
+                            🛒
+                            <span class="cart-badge">0</span>
+                        </div>
+                    </a></li>
+
+                <li id="auth-buttons">
+                    <a href="auth.html" class="btn btn-primary btn-sm">Sign In</a>
+                </li>
+
+                <li id="user-menu" class="hidden">
+                    <span id="user-name">User</span>
+                    <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Products Page -->
+    <div class="products-page">
+        <div class="container">
+            <h1>All Products</h1>
+
+            <div class="products-layout">
+                <!-- Filters Sidebar -->
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h2 class="filter-title">Filters</h2>
+
+                        <!-- Search -->
+                        <div class="filter-group">
+                            <div class="search-box">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" id="search-input" class="search-input"
+                                    placeholder="Search products...">
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="filter-group">
+                            <h3>Category</h3>
+                            <div class="filter-option">
+                                <input type="radio" id="cat-all" name="category" value="all" checked
+                                    onchange="handleCategoryChange(this)">
+                                <label for="cat-all">All Products</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="cat-electronics" name="category" value="Electronics"
+                                    onchange="handleCategoryChange(this)">
+                                <label for="cat-electronics">Electronics</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="cat-fashion" name="category" value="Fashion"
+                                    onchange="handleCategoryChange(this)">
+                                <label for="cat-fashion">Fashion</label>
+                            </div>
+                        </div>
+
+                        <!-- Price Range Filter -->
+                        <div class="filter-group">
+                            <h3>Price Range</h3>
+                            <div class="filter-option">
+                                <input type="radio" id="price-all" name="price" value="all" checked
+                                    onchange="handlePriceChange(this)">
+                                <label for="price-all">All Prices</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="price-under50" name="price" value="under50"
+                                    onchange="handlePriceChange(this)">
+                                <label for="price-under50">Under $50</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="price-50to100" name="price" value="50to100"
+                                    onchange="handlePriceChange(this)">
+                                <label for="price-50to100">$50 - $100</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="price-100to200" name="price" value="100to200"
+                                    onchange="handlePriceChange(this)">
+                                <label for="price-100to200">$100 - $200</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="price-over200" name="price" value="over200"
+                                    onchange="handlePriceChange(this)">
+                                <label for="price-over200">Over $200</label>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Products Grid -->
+                <div class="products-content">
+                    <div class="products-header">
+                        <div class="products-count" id="products-count">Showing all products</div>
+                        <div class="sort-controls">
+                            <label for="sort-select">Sort by:</label>
+                            <select id="sort-select" class="sort-select" onchange="handleSortChange(this)">
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="name">Name: A-Z</option>
+                                <option value="rating">Rating: High to Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3" id="products-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Initialize products page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check URL params for category
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+
+            if (category) {
+                currentFilters.category = category;
+                const radio = document.querySelector(`input[name="category"][value="${category}"]`);
+                if (radio) radio.checked = true;
+            }
+
+            updateProductDisplay();
+            updateProductCount();
+        });
+
+        function handleCategoryChange(radio) {
+            currentFilters.category = radio.value;
+            updateProductDisplay();
+            updateProductCount();
+        }
+
+        function handlePriceChange(radio) {
+            currentFilters.priceRange = radio.value;
+            updateProductDisplay();
+            updateProductCount();
+        }
+
+        function handleSortChange(select) {
+            currentFilters.sort = select.value;
+            updateProductDisplay();
+        }
+
+        function updateProductCount() {
+            const filtered = applyFilters();
+            const countEl = document.getElementById('products-count');
+            if (countEl) {
+                countEl.textContent = `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+            }
+        }
+    </script>
+</body>
+
+</html>

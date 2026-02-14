@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Product details">
+    <title>Product Details - ShopHub</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .product-detail-page {
+            padding: var(--spacing-3xl) 0;
+        }
+
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-3xl);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .product-detail-image {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .product-detail-info {
+            padding: var(--spacing-lg);
+        }
+
+        .product-detail-info .product-category {
+            font-size: var(--font-size-sm);
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .product-detail-info .product-title {
+            font-size: var(--font-size-4xl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .product-detail-info .product-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-lg);
+        }
+
+        .product-detail-info .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: var(--spacing-md);
+        }
+
+        .product-detail-info .price-current {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .product-detail-info .price-original {
+            font-size: var(--font-size-2xl);
+            color: var(--color-gray-400);
+            text-decoration: line-through;
+        }
+
+        .product-detail-info .product-description {
+            font-size: var(--font-size-lg);
+            line-height: 1.8;
+            color: var(--color-gray-700);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 1024px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+            }
+
+            .product-detail-image {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">ShopHub</a>
+
+            <button class="mobile-menu-toggle">☰</button>
+
+            <ul class="navbar-menu">
+                <li><a href="index.html" class="navbar-link">Home</a></li>
+                <li><a href="products.html" class="navbar-link">Products</a></li>
+                <li><a href="cart.html" class="navbar-link">
+                        <div class="cart-icon">
+                            🛒
+                            <span class="cart-badge">0</span>
+                        </div>
+                    </a></li>
+
+                <li id="auth-buttons">
+                    <a href="auth.html" class="btn btn-primary btn-sm">Sign In</a>
+                </li>
+
+                <li id="user-menu" class="hidden">
+                    <span id="user-name">User</span>
+                    <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Product Detail Page -->
+    <div class="product-detail-page">
+        <div class="container">
+            <a href="products.html" class="text-primary">&larr; Back to Products</a>
+
+            <div id="product-detail-content"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (productId) {
+                renderProductDetail(productId);
+            } else {
+                window.location.href = 'products.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

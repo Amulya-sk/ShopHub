@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Premium e-commerce platform offering the latest electronics and fashion items">
+  <title>ShopHub - Premium E-Commerce Platform</title>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  
+  <!-- Add custom styles for homepage -->
+  <style>
+    /* Additional cart styles */
+    .cart-item {
+      display: flex;
+      gap: var(--spacing-md);
+      padding: var(--spacing-lg);
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--spacing-md);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+    }
+    
+    .cart-item-details {
+      flex-grow: 1;
+    }
+    
+    .cart-item-name {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .cart-item-price {
+      color: var(--color-primary);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .quantity-btn {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--color-primary);
+      background: transparent;
+      color: var(--color-primary);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: var(--font-size-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    
+    .quantity-btn:hover {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+    
+    .quantity-input {
+      width: 60px;
+      text-align: center;
+      padding: var(--spacing-sm);
+      border: 2px solid var(--color-gray-300);
+      border-radius: var(--radius-md);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    .cart-item-total {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--spacing-md);
+    }
+    
+    .item-total-price {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+    }
+    
+    .btn-remove {
+      background: transparent;
+      border: none;
+      color: var(--color-error);
+      font-size: var(--font-size-2xl);
+      cursor: pointer;
+      padding: var(--spacing-xs);
+      transition: color var(--transition-fast);
+    }
+    
+    .btn-remove:hover {
+      color: var(--color-error);
+      opacity: 0.7;
+    }
+    
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: -300px;
+      background: var(--color-white);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      z-index: var(--z-tooltip);
+      transition: right var(--transition-base);
+      max-width: 300px;
+    }
+    
+    .notification.show {
+      right: var(--spacing-lg);
+    }
+    
+    .notification-success {
+      border-left: 4px solid var(--color-success);
+    }
+    
+    .notification-error {
+      border-left: 4px solid var(--color-error);
+    }
+    
+    /* Featured section */
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--spacing-3xl);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-4xl);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .section-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-gray-600);
+    }
+    
+    /* Category cards */
+    .category-card {
+      position: relative;
+      height: 250px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition-base);
+    }
+    
+    .category-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .category-card-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    
+    .category-card:hover .category-card-bg {
+      transform: scale(1.1);
+    }
+    
+    .category-card-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+      display: flex;
+      align-items: flex-end;
+      padding: var(--spacing-xl);
+    }
+    
+    .category-card-title {
+      color: var(--color-white);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+    }
+    
+    /* Newsletter */
+    .newsletter-section {
+      background: var(--gradient-primary);
+      color: var(--color-white);
+      padding: var(--spacing-3xl) 0;
+      text-align: center;
+    }
+    
+    .newsletter-form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+    
+    .newsletter-input {
+      flex-grow: 1;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+    }
+    
+    .newsletter-btn {
+      padding: var(--spacing-md) var(--spacing-2xl);
+      background: var(--color-white);
+      color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+    
+    .newsletter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* Footer */
+    .footer {
+      background: var(--color-gray-900);
+      color: var(--color-gray-300);
+      padding: var(--spacing-3xl) 0 var(--spacing-xl);
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-2xl);
+      margin-bottom: var(--spacing-2xl);
+    }
+    
+    .footer-section h4 {
+      color: var(--color-white);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .footer-links a {
+      color: var(--color-gray-400);
+      transition: color var(--transition-fast);
+    }
+    
+    .footer-links a:hover {
+      color: var(--color-white);
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: var(--spacing-xl);
+      border-top: 1px solid var(--color-gray-800);
+      color: var(--color-gray-500);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-logo">ShopHub</a>
+      
+      <button class="mobile-menu-toggle">☰</button>
+      
+      <ul class="navbar-menu">
+        <li><a href="index.html" class="navbar-link">Home</a></li>
+        <li><a href="products.html" class="navbar-link">Products</a></li>
+        <li><a href="cart.html" class="navbar-link">
+          <div class="cart-icon">
+            🛒
+            <span class="cart-badge">0</span>
+          </div>
+        </a></li>
+        
+        <li id="auth-buttons">
+          <a href="auth.html" class="btn btn-primary btn-sm">Sign In</a>
+        </li>
+        
+        <li id="user-menu" class="hidden">
+          <span id="user-name">User</span>
+          <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Discover Premium Products</h1>
+        <p>Shop the latest electronics and fashion items with exclusive deals</p>
+        <div class="hero-cta">
+          <a href="products.html" class="btn btn-primary btn-lg">Shop Now</a>
+          <a href="#featured" class="btn btn-outline btn-lg" style="color: white; border-color: white;">View Featured</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section" id="featured">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked selection of our best products</p>
+      </div>
+      <div class="grid grid-cols-4" id="featured-products"></div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section" style="background: var(--color-white);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">Explore our diverse range of products</p>
+      </div>
+      <div class="grid grid-cols-2">
+        <div class="category-card" onclick="window.location.href='products.html?category=Electronics'">
+          <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=500&fit=crop" alt="Electronics" class="category-card-bg">
+          <div class="category-card-overlay">
+            <h3 class="category-card-title">Electronics</h3>
+          </div>
+        </div>
+        <div class="category-card" onclick="window.location.href='products.html?category=Fashion'">
+          <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=800&h=500&fit=crop" alt="Fashion" class="category-card-bg">
+          <div class="category-card-overlay">
+            <h3 class="category-card-title">Fashion</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2>Subscribe to Our Newsletter</h2>
+      <p>Get the latest updates on new products and exclusive deals</p>
+      <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+        <input type="email" class="newsletter-input" placeholder="Enter your email" required>
+        <button type="submit" class="newsletter-btn">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>About ShopHub</h4>
+          <p>Your destination for premium electronics and fashion items.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="products.html">Products</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="checkout.html">Checkout</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customer Service</h4>
+          <ul class="footer-links">
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Follow Us</h4>
+          <ul class="footer-links">
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ShopHub. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    // Render featured products on homepage
+    document.addEventListener('DOMContentLoaded', () => {
+      const featuredProducts = PRODUCTS.filter(p => p.featured).slice(0, 4);
+      renderProducts(featuredProducts, 'featured-products');
+    });
+    
+    // Handle newsletter subscription
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input').value;
+      showNotification('Thank you for subscribing!');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
